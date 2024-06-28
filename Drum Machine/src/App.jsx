@@ -24,17 +24,32 @@ function App() {
   });
   //console.log(Object.keys(audio));
 
+  const [display, setDisplay] = useState("");
+
   const keyboardKeys = ["Q", "W", "E", "A", "S", "D", "Z", "X", "C"];
+
+  function handleClick(e) {
+    const index = keyboardKeys.indexOf(e.target.children[0].id); //get id from element clicked and get index from keyboardKeys
+    setDisplay(Object.keys(audio)[index]); //convert audio object keys to an array and use index to find the key value
+    const playAudio = e.target.children[0]; //if only one audio element
+    playAudio.play();
+  }
 
   return (
     <div id="drum-machine">
+      <div id="display">{display}</div>
       {Object.keys(audio).map((key, index) => (
-        <button className="drum-pad" id={index + 1} key={index + 1}>
+        <button
+          className="drum-pad"
+          id={index + 1}
+          key={key}
+          onClick={handleClick}
+        >
           {keyboardKeys[index]}
           <audio
             className="clip"
-            src={audio[key]}
             id={keyboardKeys[index]}
+            src={audio[key]}
           ></audio>
         </button>
       ))}
