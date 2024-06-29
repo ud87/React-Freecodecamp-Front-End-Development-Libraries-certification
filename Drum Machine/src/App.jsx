@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -32,8 +32,27 @@ function App() {
     const index = keyboardKeys.indexOf(e.target.children[0].id); //get id from element clicked and get index from keyboardKeys
     setDisplay(Object.keys(audio)[index]); //convert audio object keys to an array and use index to find the key value
     const playAudio = e.target.children[0]; //if only one audio element
+    //console.log(playAudio);
     playAudio.play();
   }
+
+  //event listener that listens for key press and plays sound
+  const handleKeyPress = useCallback((event) => {
+    //console.log(`key pressed: ${event.key}`.toUpperCase());
+
+    const playAudio = document.getElementById(`${event.key}`.toUpperCase());
+    playAudio.play();
+  }, []);
+
+  useEffect(() => {
+    //add event listener
+    document.addEventListener("keydown", handleKeyPress);
+
+    //clean up event listener on component unmount
+    return () => {
+      document.addEventListener("keydown", handleKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <div id="drum-machine">
