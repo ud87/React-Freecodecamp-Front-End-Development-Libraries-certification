@@ -5,6 +5,7 @@ This repository is created as a part of freecodecamp front end development libra
 
 # Live Demo
 [Markdown Previewer Live Demo] (https://markdown-previewer-udaya.netlify.app/)
+[Drum Machine Live Demo] (https://drum-machine-udaya.netlify.app/)
 
 # Requirements
 All
@@ -12,6 +13,9 @@ All
 
 Markdown previewer
 - Create a editor where markdown is entered and preview is shown in preview window
+
+Drum Machine
+- Drum machine which plays music when drum pads are pressed/clicked
 
 # Built with
 All
@@ -28,6 +32,10 @@ All
 - JSX syntax
 - React state
 - React props
+- Event Listener
 
 Markdown Previewer
 - Markdown library
+
+Drum Machine
+- HTML5 audio element
