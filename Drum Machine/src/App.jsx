@@ -25,6 +25,7 @@ function App() {
   //console.log(Object.keys(audio));
 
   const [display, setDisplay] = useState("");
+  const [muted, setMuted] = useState(false);
 
   const keyboardKeys = ["Q", "W", "E", "A", "S", "D", "Z", "X", "C"];
 
@@ -54,24 +55,40 @@ function App() {
     };
   }, [handleKeyPress]);
 
+  function powerOff() {
+    setMuted(!muted); //toggle true and false muted
+    console.log(muted);
+  }
+
   return (
     <div id="drum-machine">
+      {/*power off button*/}
+      <button
+        className="power-on-off"
+        onClick={powerOff}
+        style={{ backgroundColor: muted ? "green" : "red" }}
+      >
+        {muted ? "Power on" : "Power off"}
+      </button>
       <div id="display">{display}</div>
-      {Object.keys(audio).map((key, index) => (
-        <button
-          className="drum-pad"
-          id={index + 1}
-          key={key}
-          onClick={handleClick}
-        >
-          {keyboardKeys[index]}
-          <audio
-            className="clip"
-            id={keyboardKeys[index]}
-            src={audio[key]}
-          ></audio>
-        </button>
-      ))}
+      <div className="drum-buttons">
+        {Object.keys(audio).map((key, index) => (
+          <button
+            className="drum-pad"
+            id={index + 1}
+            key={key}
+            onClick={handleClick}
+          >
+            {keyboardKeys[index]}
+            <audio
+              className="clip"
+              id={keyboardKeys[index]}
+              src={audio[key]}
+              muted={muted}
+            ></audio>
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
