@@ -1,15 +1,15 @@
 import React from "react";
 
-export default function Session() {
+export default function Session(props) {
   return (
     <div class="session">
       <div id="session-label">Session Length</div>
       <div className="controls">
-        <button id="session-decrement">
+        <button id="session-decrement" onClick={props.sessionLengthDecrease}>
           <i class="fa-solid fa-arrow-down fa-lg"></i>
         </button>
-        <div id="session-length">25</div>
-        <button id="session-increment">
+        <div id="session-length">{props.sessionLength}</div>
+        <button id="session-increment" onClick={props.sessionLengthIncrease}>
           <i class="fa-solid fa-arrow-up fa-lg"></i>
         </button>
       </div>
