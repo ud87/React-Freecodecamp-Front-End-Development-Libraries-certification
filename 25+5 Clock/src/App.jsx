@@ -9,6 +9,11 @@ import Timer from "../components/Timer.jsx";
 function App() {
   const [breakLength, setBreaklength] = useState(5);
   const [sessionLength, setSessionLength] = useState(25);
+  const [currentSessionLengthMins, setCurrentSessionLengthMins] =
+    useState(sessionLength);
+  const [currentBreakLengthMins, setCurrentBreakLengthMins] =
+    useState(breakLength);
+  const [secs, setSecs] = useState("00");
 
   function breakLengthDecrease() {
     if (breakLength > 1) {
@@ -42,6 +47,38 @@ function App() {
     }
   }
 
+  //timer function to switch between session length function and break length function
+  function timer() {
+    if (currentSessionLengthMins != 0) {
+      currentSesssionLength();
+    } else if (currentSessionLengthMins == 0) {
+      currentBreakLength();
+    } else if (currentBreakLengthMins == 0 && currentSessionLengthMins == 0) {
+      setCurrentBreakLengthMins(breakLength);
+      setCurrentBreakLengthMins(sessionLength);
+    }
+  }
+
+  //current session length function to change current session length time
+  function currentSesssionLength() {
+    if (secs == "00") {
+      setCurrentSessionLengthMins(currentSessionLengthMins - 1);
+      setSecs(60 - 1);
+    } else {
+      setSecs(secs - 1);
+    }
+  }
+
+  //current break length function to change current break length time
+  function currentBreakLength() {
+    if (secs == "00") {
+      setCurrentBreakLengthMins(currentBreakLengthMins - 1);
+      setSecs(60 - 1);
+    } else {
+      setSecs(secs - 1);
+    }
+  }
+
   return (
     <div className="container">
       <h1>25 + 5 Clock</h1>
@@ -57,7 +94,12 @@ function App() {
           sessionLengthIncrease={sessionLengthIncrease}
         />
       </div>
-      <Timer />
+      <Timer
+        currentBreakLengthMins={currentBreakLengthMins}
+        currentSessionLengthMins={currentSessionLengthMins}
+        timer={timer}
+        secs={secs}
+      />
     </div>
   );
 }
