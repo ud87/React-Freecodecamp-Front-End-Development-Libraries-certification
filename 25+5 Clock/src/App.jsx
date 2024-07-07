@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -13,7 +13,71 @@ function App() {
     useState(sessionLength);
   const [currentBreakLengthMins, setCurrentBreakLengthMins] =
     useState(breakLength);
-  const [secs, setSecs] = useState("00");
+  const [secs, setSecs] = useState(0);
+  const [isSession, setIsSession] = useState(true); //true for session, false for break
+  const [isRunning, setIsRunning] = useState(false);
+
+  const timerRef = useRef(null);
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (isRunning) {
+      timerRef.current = setInterval(() => {
+        if (isSession) {
+          if (currentSessionLengthMins === 0 && secs === 0) {
+            setIsSession(false);
+            setCurrentBreakLengthMins(breakLength);
+            setSecs(0);
+          } else if (secs === 0) {
+            setCurrentSessionLengthMins(currentSessionLengthMins - 1);
+            setSecs(59);
+          } else {
+            setSecs(secs - 1);
+          }
+        } else {
+          if (currentBreakLengthMins === 0 && secs === 0) {
+            setIsSession(true);
+            setCurrentSessionLengthMins(sessionLength);
+            setSecs(0);
+          } else if (secs === 0) {
+            setCurrentBreakLengthMins(currentBreakLengthMins - 1);
+            setSecs(59);
+          } else {
+            setSecs(secs - 1);
+          }
+        }
+      }, 1000);
+
+      return () => clearInterval(timerRef.current);
+    }
+  }, [
+    isRunning,
+    currentSessionLengthMins,
+    currentBreakLengthMins,
+    secs,
+    isSession,
+    sessionLength,
+    breakLength,
+  ]);
+
+  function sessionLengthDecrease() {
+    if (sessionLength > 1) {
+      setCurrentSessionLengthMins(sessionLength - 1);
+      return setSessionLength(sessionLength - 1);
+    } else {
+      setCurrentSessionLengthMins(1);
+      return setSessionLength(1);
+    }
+  }
+
+  function sessionLengthIncrease() {
+    if (sessionLength < 60) {
+      setCurrentSessionLengthMins(sessionLength + 1);
+      return setSessionLength(sessionLength + 1);
+    } else {
+      return setSessionLength(60);
+    }
+  }
 
   function breakLengthDecrease() {
     if (breakLength > 1) {
@@ -31,51 +95,22 @@ function App() {
     }
   }
 
-  function sessionLengthDecrease() {
-    if (sessionLength > 1) {
-      return setSessionLength(sessionLength - 1);
-    } else {
-      return setSessionLength(1);
-    }
+  function handleStartStop() {
+    setIsRunning(!isRunning);
   }
 
-  function sessionLengthIncrease() {
-    if (sessionLength < 60) {
-      return setSessionLength(sessionLength + 1);
-    } else {
-      return setSessionLength(60);
-    }
-  }
-
-  //timer function to switch between session length function and break length function
-  function timer() {
-    if (currentSessionLengthMins != 0) {
-      currentSesssionLength();
-    } else if (currentSessionLengthMins == 0) {
-      currentBreakLength();
-    } else if (currentBreakLengthMins == 0 && currentSessionLengthMins == 0) {
-      setCurrentBreakLengthMins(breakLength);
-      setCurrentBreakLengthMins(sessionLength);
-    }
-  }
-
-  //current session length function to change current session length time
-  function currentSesssionLength() {
-    if (secs == "00") {
-      setCurrentSessionLengthMins(currentSessionLengthMins - 1);
-      setSecs(60 - 1);
-    } else {
-      setSecs(secs - 1);
-    }
-  }
-
-  //current break length function to change current break length time
-  function currentBreakLength() {
-    if (secs == "00") {
-      setCurrentBreakLengthMins(currentBreakLengthMins - 1);
-      setSecs(60 - 1);
-    } else {
-      setSecs(secs - 1);
+  function handleReset() {
+    clearInterval(timerRef.current);
+    setIsRunning(false);
+    setBreaklength(5);
+    setSessionLength(25);
+    setCurrentSessionLengthMins(25);
+    setCurrentBreakLengthMins(5);
+    setSecs(0);
+    setIsSession(true);
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
     }
   }
 
@@ -97,8 +132,11 @@ function App() {
       <Timer
         currentBreakLengthMins={currentBreakLengthMins}
         currentSessionLengthMins={currentSessionLengthMins}
-        timer={timer}
         secs={secs}
+        isSession={isSession}
+        handleStartStop={handleStartStop}
+        handleReset={handleReset}
+        audioRef={audioRef}
       />
     </div>
   );
