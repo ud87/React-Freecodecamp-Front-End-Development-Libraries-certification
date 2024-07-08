@@ -57,3 +57,12 @@ h1 {
   border-radius: 5px;
   border: none;
 }
+
+footer p {
+  font-size: 12px;
+  color: yellow;
+}
+
+.author {
+  display: block;
+}

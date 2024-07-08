@@ -47,6 +47,11 @@ export default function Timer(props) {
           Reset
         </button>
       </div>
+      <footer>
+        <p>
+          Designed and Coded by <span className="author">Udaya Rai</span>
+        </p>
+      </footer>
     </div>
   );
 }
