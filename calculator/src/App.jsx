@@ -6,6 +6,56 @@ import "./App.css";
 function App() {
   const [data, setData] = useState("0");
   const [result, setResult] = useState(0);
+  const buttons = [
+    "AC",
+    "/",
+    "X",
+    "7",
+    "8",
+    "9",
+    "-",
+    "4",
+    "5",
+    "6",
+    "+",
+    "1",
+    "2",
+    "3",
+    "=",
+    "0",
+    ".",
+  ];
+  const ids = [
+    "clear",
+    "divide",
+    "multiply",
+    "seven",
+    "eight",
+    "nine",
+    "subtract",
+    "four",
+    "five",
+    "six",
+    "add",
+    "one",
+    "two",
+    "three",
+    "equals",
+    "zero",
+    "decimal",
+  ];
+
+  const buttonElements = buttons.map((button, index) => {
+    return (
+      <button
+        key={index}
+        className={`grid-item grid-item-${index + 1}`}
+        id={ids[index]}
+      >
+        {button}
+      </button>
+    );
+  });
 
   function handleClick(e) {
     //console.log(e.target.innerText);
@@ -17,59 +67,7 @@ function App() {
   return (
     <div className="container">
       <div id="display">Display</div>
-      <div className="grid-container">
-        <button className="grid-item grid-col-span-2" id="clear">
-          AC
-        </button>
-        <button className="grid-item" id="divide">
-          /
-        </button>
-        <button className="grid-item" id="multiply">
-          X
-        </button>
-        <button className="grid-item" id="seven" onClick={handleClick}>
-          7
-        </button>
-        <button className="grid-item" id="eight">
-          8
-        </button>
-        <button className="grid-item" id="nine">
-          9
-        </button>
-        <button className="grid-item" id="subtract">
-          -
-        </button>
-        <button className="grid-item" id="four">
-          4
-        </button>
-        <button className="grid-item" id="five">
-          5
-        </button>
-        <button className="grid-item" id="six">
-          6
-        </button>
-        <button className="grid-item" id="add">
-          +
-        </button>
-        <button className="grid-item" id="one">
-          1
-        </button>
-        <button className="grid-item" id="two">
-          2
-        </button>
-        <button className="grid-item" id="three">
-          3
-        </button>
-        <button className="grid-item grid-row-span-2" id="equals">
-          =
-        </button>
-        <button className="grid-item grid-col-span-2" id="zero">
-          0
-        </button>
-        <button className="grid-item" id="decimal">
-          .
-        </button>
-      </div>
+      <div className="grid-container">{buttonElements}</div>
     </div>
   );
 }
