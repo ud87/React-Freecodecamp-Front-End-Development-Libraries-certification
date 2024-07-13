@@ -4,8 +4,15 @@ import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
-  const [data, setData] = useState(0);
+  const [data, setData] = useState("0");
   const [result, setResult] = useState(0);
+
+  function handleClick(e) {
+    //console.log(e.target.innerText);
+    setData((prevData) => [...prevData, e.target.innerText]);
+    console.log(data);
+    console.log(eval(data.join("")));
+  }
 
   return (
     <div className="container">
@@ -20,7 +27,7 @@ function App() {
         <button className="grid-item" id="multiply">
           X
         </button>
-        <button className="grid-item" id="seven">
+        <button className="grid-item" id="seven" onClick={handleClick}>
           7
         </button>
         <button className="grid-item" id="eight">
