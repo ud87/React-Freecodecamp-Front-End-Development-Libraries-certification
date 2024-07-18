@@ -9,17 +9,22 @@
 .container {
   width: 50%;
   border: 5px solid grey;
-  margin: 0 auto;
   color: #FFFFFF;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-@media (max-width: 330px) {
+@media (max-width: 450px) {
   .container {
     width: 80%;
   }
 }
 
-
+#display {
+  padding: 10px;
+}
 
 .grid-container {
   display: grid;

@@ -6,7 +6,6 @@ import "./App.css";
 function App() {
   const [data, setData] = useState("0");
   const [result, setResult] = useState("0");
-  const [display, setDisplay] = useState("0");
   const [equalsClicked, setEqualsClicked] = useState(false);
   const buttons = [
     "AC",
@@ -50,7 +49,7 @@ function App() {
 
   useEffect(() => {
     if (equalsClicked) {
-      const total = data; //Use data as a string
+      const total = data.replace(/X\++/g, "+"); //Use data as a string, replace used to return 5X+5 = 10
 
       // Custom evaluate function
       const evaluateExpression = (expression) => {
@@ -68,10 +67,10 @@ function App() {
         const evalResult = evaluateExpression(total.replace("X", "*"));
         setResult(evalResult.toString());
 
+        setData(evalResult.toString());
         //update display after result is set
-        setDisplay(`${total} = ${evalResult}`);
       } catch (error) {
-        setDisplay("Error");
+        setTotal("Error");
       } finally {
         setEqualsClicked(true);
       }
@@ -88,12 +87,19 @@ function App() {
         return "0";
       }
 
-      // Prevent consecutive operators
+      // Handle consecutive operators
       if (
-        ["+", "-", "/", "X"].includes(prevData.slice(-1)) &&
-        ["+", "-", "/", "X"].includes(value)
+        ["+", "-", "/", "X"].includes(value) &&
+        ["+", "-", "/", "X"].includes(prevData.slice(-1))
       ) {
-        return prevData.slice(0, -1) + value;
+        if (
+          value === "-" &&
+          !["+", "-", "/", "X"].includes(prevData.slice(-2, -1))
+        ) {
+          return prevData + value;
+        } else {
+          return prevData.slice(0, -1) + value;
+        }
       }
 
       // Handle initial zero
@@ -102,16 +108,16 @@ function App() {
       }
 
       // Handle multiple decimal points
-      if (value === "." && prevData.includes(".")) {
+      if (
+        value === "." &&
+        prevData
+          .split(/[\+\-\*\/]/)
+          .slice(-1)[0]
+          .includes(".")
+      ) {
         return prevData;
       }
 
-      // Replace "X" with "*" for multiplication
-      if (value === "X") {
-        return prevData + "*";
-      }
-
-      // Otherwise, append the new value
       return prevData + value;
     });
   }
